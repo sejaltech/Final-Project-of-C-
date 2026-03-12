@@ -117,5 +117,7 @@ Through this project, students learn:
 👩‍💻 Author
 
 Sejal Singh
+
 🎓 B.Tech – Computer Science & Engineering
+
 📅 2025 – 2029
