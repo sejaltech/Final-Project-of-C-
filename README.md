@@ -1,4 +1,4 @@
-Readme · MDCopy🧮 Matrix Addition System (C++)
+🧮 Matrix Addition System (C++)
 
 A console-based Matrix Addition System developed in C++ as part of Case Study 167.
 
