@@ -3,8 +3,6 @@
 #include <limits>
 using namespace std;
 
-const int MAX = 10;
-
 // Safe integer input
 int getValidInt(string message, int min, int max) {
     int value;
@@ -22,8 +20,7 @@ int getValidInt(string message, int min, int max) {
 }
 
 // Display matrix with borders
-void displayMatrix(int mat[][MAX], int rows, int cols) {
-
+void displayMatrix(int** mat, int rows, int cols) {
     cout << "   ╔";
     for (int j = 0; j < cols; j++)
         cout << "═══════" << (j < cols-1 ? "╦" : "╗");
@@ -52,7 +49,7 @@ void displayMatrix(int mat[][MAX], int rows, int cols) {
 // Section header
 void printHeader(const string& title) {
     cout << "\n   ╔══════════════════════════════════╗\n";
-    cout << "   ║  " << left << setw(34) << title << "║\n";
+    cout << "   ║  " << left << setw(32) << title << "║\n";
     cout << "   ╚══════════════════════════════════╝\n\n";
 }
 
@@ -61,9 +58,23 @@ void printDivider() {
     cout << "   ─────────────────────────────────────\n";
 }
 
+// Allocate 2D matrix dynamically
+int** allocateMatrix(int rows, int cols) {
+    int** mat = new int*[rows];
+    for (int i = 0; i < rows; i++)
+        mat[i] = new int[cols];
+    return mat;
+}
+
+// Free dynamically allocated matrix
+void freeMatrix(int** mat, int rows) {
+    for (int i = 0; i < rows; i++)
+        delete[] mat[i];
+    delete[] mat;
+}
+
 int main() {
     int rows, cols;
-    int A[MAX][MAX], B[MAX][MAX], result[MAX][MAX];
     int choice;
 
     cout << "\n";
@@ -89,8 +100,26 @@ int main() {
             cout << "\n   Enter Matrix Size\n";
             printDivider();
 
-            rows = getValidInt("   Rows    (1-10) : ", 1, 10);
-            cols = getValidInt("   Columns (1-10) : ", 1, 10);
+            cout << "   Rows    (1-50) : ";
+            while (!(cin >> rows) || rows < 1 || rows > 50) {
+                cout << "\n   Invalid! Enter a number between 1 and 50.\n";
+                cout << "   Rows    (1-50) : ";
+                cin.clear();
+                cin.ignore(numeric_limits<streamsize>::max(), '\n');
+            }
+
+            cout << "   Columns (1-50) : ";
+            while (!(cin >> cols) || cols < 1 || cols > 50) {
+                cout << "\n   Invalid! Enter a number between 1 and 50.\n";
+                cout << "   Columns (1-50) : ";
+                cin.clear();
+                cin.ignore(numeric_limits<streamsize>::max(), '\n');
+            }
+
+            // Dynamically allocate matrices
+            int** A      = allocateMatrix(rows, cols);
+            int** B      = allocateMatrix(rows, cols);
+            int** result = allocateMatrix(rows, cols);
 
             printHeader("Enter Matrix A");
             for (int i = 0; i < rows; i++)
@@ -132,6 +161,11 @@ int main() {
             cout << "\n   ╔══════════════════════════════════╗\n";
             cout << "   ║   Addition Completed             ║\n";
             cout << "   ╚══════════════════════════════════╝\n";
+
+            // Free memory
+            freeMatrix(A, rows);
+            freeMatrix(B, rows);
+            freeMatrix(result, rows);
         }
 
     } while (choice != 2);
